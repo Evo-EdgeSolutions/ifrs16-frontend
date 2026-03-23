@@ -1,0 +1,32 @@
+@import '@/src/styles/variables';
+
+.heading {
+  margin-top: 0;
+  color: $text-color;
+  // color: #D1D5DB;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+// Dynamically scales the font sizes and margins based on the level
+.h1 { 
+  font-size: 2.5rem; 
+  margin-bottom: 1.5rem; 
+}
+.h2 { 
+  font-size: 2rem; 
+  margin-bottom: 1.25rem; 
+}
+.h3 { 
+  font-size: 1.5rem; 
+  margin-bottom: 1rem; 
+}
+.h4 { 
+  font-size: 1.25rem; 
+  margin-bottom: 0.75rem; 
+}
+
+.h5 { 
+  font-size: 1rem; 
+  margin-bottom: 0.75rem; 
+}

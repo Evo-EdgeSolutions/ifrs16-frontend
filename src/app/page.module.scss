@@ -1,0 +1,17 @@
+.main {
+  margin: 0 auto;
+  padding: 2rem 2rem 4rem;
+
+  // background-color: rgba(44, 91, 133, 0.193);
+  background-color: #182c4b36;;
+}
+
+.calculatorLayout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+
+  @media (min-width: 768px) {
+    grid-template-columns: 1fr 1fr;
+  }
+}

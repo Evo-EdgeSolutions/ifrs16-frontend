@@ -1,0 +1,16 @@
+// Base Colors
+$bg-color: #000000; // Almost black (pure #000 can sometimes be too harsh)
+$text-color: #f8fafc; // Off-white for readability
+$text-muted: #94a3b8; // For secondary text
+
+// Accent Colors
+$primary-color: #2c78f3d5;
+$primary-hover: #274a81d7;
+$error-color: #ef4444;
+
+// Glassmorphism Variables
+// $glass-bg: rgba(244, 244, 244, 0.117); // Very transparent white
+$glass-bg: rgba(102, 155, 216, 0.117); // Very transparent white
+$glass-border: rgba(255, 255, 255, 0.08); // Slightly visible border
+$glass-blur: blur(18px) saturate(150%); // The magic frosted effect
+$border-radius: 16px; // Slightly rounder edges look better with glass

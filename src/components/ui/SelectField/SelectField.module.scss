@@ -1,0 +1,65 @@
+@import '../../../styles/variables';
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.label {
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: $text-color;
+}
+
+.selectWrapper {
+  position: relative;
+  
+  // Custom dropdown arrow
+  &::after {
+    content: '▼';
+    font-size: 0.8rem;
+    color: $text-muted;
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+}
+
+.select {
+  width: 100%;
+  padding: 0.75rem;
+  appearance: none; // Hides native OS dropdown arrow
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid $glass-border;
+  color: $text-color;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-color;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  }
+
+  // Style the options list (Note: highly dependent on OS/Browser, but helps in standard environments)
+  option {
+    background-color: $bg-color;
+    color: $text-color;
+  }
+}
+
+.selectError {
+  border-color: $error-color;
+}
+
+.errorText {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: $error-color;
+}

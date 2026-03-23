@@ -1,0 +1,27 @@
+@import '../../../src/styles/variables';
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  
+  /* Sticky positioning */
+  position: sticky;
+  top: 0;
+  z-index: 100; /* Ensures the header stays above the scrolling content */
+  
+  /* Background color is crucial! Otherwise, scrolling text will overlap with your header text */
+//   background-color: #ffffff; 
+  
+  /* Optional: Adds a subtle shadow when scrolling */
+  border-bottom: 1px solid $primary-hover; 
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.headingText {
+  color: #D1D5DB;
+//   color: rgb(255, 255, 255);
+//   color: $primary-hover;
+  margin: 0; /* Removes default heading margins to keep it centered vertically */
+}

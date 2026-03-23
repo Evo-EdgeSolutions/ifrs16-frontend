@@ -1,0 +1,78 @@
+.footer {
+  width: 100%;
+  margin-top: auto; /* Pushes footer to the bottom if inside a flex col container */
+  padding: 1.5rem 1rem; /* py-6 px-4 */
+  border-top: 1px solid #1e293b; /* border-slate-800 */
+  background-color: rgba(15, 23, 42, 0.5); /* bg-slate-900/50 */
+}
+
+.container {
+  max-width: 80rem; /* max-w-7xl */
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+
+  /* md:flex-row breakpoint */
+  @media (min-width: 768px) {
+    flex-direction: row;
+  }
+}
+
+.copyright {
+  font-size: 0.875rem; /* text-sm */
+  color: #94a3b8; /* text-slate-400 */
+  font-weight: 500;
+}
+
+.versionContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* gap-2 */
+}
+
+.statusDotContainer {
+  position: relative;
+  display: flex;
+  height: 0.5rem; /* h-2 */
+  width: 0.5rem; /* w-2 */
+}
+
+.ping {
+  position: absolute;
+  display: inline-flex;
+  height: 100%;
+  width: 100%;
+  border-radius: 9999px;
+  background-color: #60a5fa; /* bg-blue-400 */
+  animation: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.dot {
+  position: relative;
+  display: inline-flex;
+  border-radius: 9999px;
+  height: 0.5rem; /* h-2 */
+  width: 0.5rem; /* w-2 */
+  background-color: #3b82f6; /* bg-blue-500 */
+}
+
+.versionText {
+  font-size: 0.75rem; /* text-xs */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; /* font-mono */
+  color: #64748b; /* text-slate-500 */
+}
+
+/* Recreating Tailwind's ping animation */
+@keyframes ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.2; /* opacity-20 start */
+  }
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}

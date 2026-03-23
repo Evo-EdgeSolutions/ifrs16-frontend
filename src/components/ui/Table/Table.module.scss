@@ -1,0 +1,77 @@
+@import '../../../styles/variables';
+
+.tableContainer {
+  background: $glass-bg;
+  backdrop-filter: $glass-blur;
+  -webkit-backdrop-filter: $glass-blur;
+  border: 1px solid $glass-border;
+  border-radius: $border-radius;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  overflow: hidden; // Keeps the rounded corners intact
+
+  max-height: 550px; 
+  display: flex;
+  flex-direction: column;
+}
+
+.tableScroll {
+  overflow-x: auto; 
+  overflow-y: auto; // Enables vertical scrolling
+  flex-grow: 1;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  color: $text-color;
+
+  th, td {
+    padding: 1rem 1.5rem;
+    white-space: nowrap;
+  }
+
+  th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    color: $text-color;
+    
+    border-bottom: none; 
+    box-shadow: inset 0 -1px 0 $glass-border;
+  }
+
+  tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background-color 0.2s ease;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
+
+  td {
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+}
+
+.emptyCell {
+  text-align: center;
+  padding: 3rem !important;
+  color: $text-muted;
+  font-style: italic;
+}

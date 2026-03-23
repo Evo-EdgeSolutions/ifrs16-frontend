@@ -1,0 +1,44 @@
+@import "../../../../styles/variables";
+
+// The glass effect mixin
+@mixin glass-panel {
+  background: rgba(222, 247, 154, 0.123);
+  backdrop-filter: $glass-blur;
+  -webkit-backdrop-filter: $glass-blur;
+  border: 1px solid $glass-border;
+  border-radius: $border-radius;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+.formContainer {
+  @include glass-panel;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  
+  // Target the Heading component we built earlier
+  h3 { 
+    color: $text-color; 
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid $glass-border;
+    padding-bottom: 0.5rem;
+  }
+}
+
+// THIS IS YOUR 2-COLUMN MAGIC
+.inputGrid {
+  display: grid;
+  grid-template-columns: 1fr; // 1 column by default (mobile)
+  gap: 1rem 1.5rem; // 1rem vertical gap, 1.5rem horizontal gap
+  margin-bottom: 1.5rem;
+
+  // Triggers 2 columns on screens wider than 640px
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+// Optional: If you want a specific input to span the whole row (like a wide dropdown)
+.fullWidth {
+  grid-column: 1 / -1; 
+}

@@ -1,0 +1,27 @@
+@import "../../../../styles/variables";
+
+.ledgerContainer {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: $glass-bg;
+  border-radius: $border-radius;
+  padding: 2rem;
+}
+
+.tablesWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  // Snaps the two tables side-by-side on large screens
+  @media (min-width: 1024px) {
+    flex-direction: row;
+  }
+}
+
+.tableBlock {
+  flex: 1;
+  min-width: 0; // Prevents the table from blowing out the flex container width
+}

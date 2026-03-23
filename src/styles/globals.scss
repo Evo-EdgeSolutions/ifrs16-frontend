@@ -1,0 +1,78 @@
+@import "./variables";
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: $bg-color;
+  color: $text-color;
+  margin: 0;
+  padding: 0;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    Segoe UI,
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    Fira Sans,
+    Droid Sans,
+    Helvetica Neue,
+    sans-serif;
+
+background-image: 
+    linear-gradient(rgb(0, 0, 0), rgba(0, 0, 0, 0.665)), 
+    url('/images/bg.jpg');
+  background-size: cover;     // Makes the image fill the screen
+  background-position: center; // Centers the image
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+* {
+  box-sizing: border-box;
+
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+::-webkit-scrollbar {
+  width: 8px; // Width of vertical scrollbar
+  height: 8px; // Height of horizontal scrollbar
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; // Keeps the track invisible to maintain the glass look
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15); // Subtle frosted white
+  border-radius: 10px;
+
+  // Add a tiny transparent border to create "padding" inside the track
+  border: 2px solid transparent;
+  background-clip: padding-box;
+
+  &:hover {
+    background: rgba(
+      255,
+      255,
+      255,
+      0.25
+    ); // Slightly brighter when hovering over it
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent; // Hides the ugly square where vertical and horizontal scrollbars meet
+}

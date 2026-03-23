@@ -1,0 +1,55 @@
+@import "../../../../styles/variables";
+
+@mixin glass-panel {
+  background: $glass-bg;
+  backdrop-filter: $glass-blur;
+  -webkit-backdrop-filter: $glass-blur;
+  border: 1px solid $glass-border;
+  border-radius: $border-radius;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.resultContainer {
+  @include glass-panel;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+}
+
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  flex: 1;
+  animation: fadeIn 0.4s ease-out forwards; // Applies the smooth entrance
+}
+
+.metricCard {
+  background: rgba(0, 0, 0, 0.033);
+  border: 2px solid rgba(255, 255, 255, 0.099);
+  border-radius: $border-radius;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: all 0.2s ease-in-out; // Smooth transition for hover states
+
+  &:hover {
+    transform: translateY(-3px); // Slight lift
+    background: rgba(255, 255, 255, 0.03); // Slightly lighter on hover
+    border-color: rgba(255, 255, 255, 0.15); // Highlight the border
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.metricLabel {
+  // color: #f3ff94;
+  color: rgb(132, 175, 244);
+}
+
