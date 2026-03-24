@@ -2,7 +2,7 @@
 
 // The glass effect mixin
 @mixin glass-panel {
-  background: rgba(222, 247, 154, 0.123);
+  background: rgba(50, 50, 50, 0.569);
   backdrop-filter: $glass-blur;
   -webkit-backdrop-filter: $glass-blur;
   border: 1px solid $glass-border;
