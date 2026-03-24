@@ -80,6 +80,7 @@ export const calculateIfrs16 = async (
     const rightOfUseAssetAmortisation = getRightOfUseAssetAmortisation(
       paymentPeriods,
       rawLeaseLiabilityInitial,
+      data.rentalLegalFees
     );
 
     const liabilitySchedule: LiabilityRow[] = paymentPeriods.map(
@@ -107,7 +108,7 @@ export const calculateIfrs16 = async (
     return {
       rouAsset: roundNumber(rawLeaseLiabilityInitial + data.rentalLegalFees),
       pvOfCashFlows: roundNumber(rawLeaseLiabilityInitial),
-      leaseLiability: roundNumber(rawLeaseLiabilityInitial),
+      leaseLiability: roundNumber(leaseLiabilityAmortisation.closingBalance[0]),
       totalInterest: roundNumber(rawTotalInterest),
       liabilitySchedule, // Add to return
       assetSchedule, // Add to return

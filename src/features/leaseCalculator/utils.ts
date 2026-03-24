@@ -79,9 +79,9 @@ export const calculatePresentValueSchedule = (
   const ifArrears = checkPaymentTiming(paymentTiming);
 
   paymentPeriods.forEach((t) => {
-    const factor1 = roundNumber(1 / (1 + monthlyDiscountRate / 100) ** t, 3);
-    // const factor1 = (1 / (1 + monthlyDiscountRate / 100) ** t);
-    const factor =
+    const factor2 = roundNumber(1 / (1 + monthlyDiscountRate / 100) ** t, 3);
+    const factor = (1 / (1 + monthlyDiscountRate / 100) ** t);
+    const factor1 =
       Math.trunc((1 / (1 + monthlyDiscountRate / 100) ** t) * 1000) / 1000;
     discountFactors.push(factor);
     // discountFactors1.push(factor1);
@@ -123,12 +123,13 @@ export const getLeaseLiabilityAmortisation = (
   let closingBalance: number[] = [];
   let periodPvOfLiability: number = leaseLiabilityInitialApplication;
   const ifArrears = checkPaymentTiming(paymentTiming);
+  let isRentalOver = false;
 
   paymentPeriods.forEach((t, index) => {
-    pvOfLiability.push(periodPvOfLiability);
+    pvOfLiability.push(periodPvOfLiability > 0 ? periodPvOfLiability : 0);
     const isPaymentMonth = checkIsPaymentMonth(t - ifArrears, paymentsPerYear);
 
-    const isRentalOver = index > 0 && closingBalance[index - 1] < netCashflow;
+    // const isRentalOver = index > 0 && (closingBalance[index - 1] - netCashflow) > 0;
 
     const currentCashflow = isPaymentMonth ? netCashflow : 0;
     monthlyRental.push(isRentalOver ? 0 : currentCashflow);
@@ -136,48 +137,50 @@ export const getLeaseLiabilityAmortisation = (
     const interestForPeriod =
       (periodPvOfLiability - currentCashflow) *
       (incrementalBorrowingMonthlyRate / 100);
-    interestForPeriods.push(isRentalOver ? 0 : interestForPeriod);
+    interestForPeriods.push(
+      isRentalOver ? 0 : interestForPeriod > 0 ? interestForPeriod : 0,
+    );
 
     const periodClosingBalance =
       periodPvOfLiability - currentCashflow + interestForPeriod;
-    closingBalance.push(isRentalOver ? 0 : periodClosingBalance);
+    closingBalance.push(
+      isRentalOver ? 0 : periodClosingBalance > 0 ? periodClosingBalance : 0,
+    );
     periodPvOfLiability = isRentalOver ? 0 : periodClosingBalance;
+
+    isRentalOver = index > 0 && interestForPeriods[index] <= 0;
   });
+
+  console.log("monthlyRental:: ", monthlyRental);
   return { pvOfLiability, monthlyRental, interestForPeriods, closingBalance };
 };
 
 export const getRightOfUseAssetAmortisation = (
   paymentPeriods: number[],
   leaseLiabilityInitialApplication: number,
+  rentalLegalFees: number,
 ): {
   cost: number[];
   depreciation: number[];
   accumulatedDepreciation: number[];
   closingBalance: number[];
 } => {
-  let cost: number[] = [];
-  let depreciation: number[] = [];
+  let periodsCount = paymentPeriods.length;
+  const calculatedCost = leaseLiabilityInitialApplication + rentalLegalFees;
+  const periodDepreciation = calculatedCost / periodsCount;
+  const cost = Array(periodsCount).fill(calculatedCost);
+  const depreciation = Array(periodsCount).fill(periodDepreciation);
   let accumulatedDepreciation: number[] = [];
   let closingBalance: number[] = [];
-  let periodsCount = paymentPeriods.length;
-  console.log('periodsCount:: ',periodsCount)
-  paymentPeriods.forEach((t, index) => {
-    cost.push(leaseLiabilityInitialApplication);
-    console.log('cost[index]:: ',cost[index])
-    const periodDepreciation = cost[index] / periodsCount;
-    console.log('periodDepreciation:: ',periodDepreciation)
-    depreciation.push(periodDepreciation);
+  let runningAccumulated = 0;
 
-    const periodAccumulatedDepreciation =
-      depreciation[index] +
-      (index > 0 ? accumulatedDepreciation[index - 1] : 0);
-    accumulatedDepreciation.push(periodAccumulatedDepreciation);
+  paymentPeriods.forEach(() => {
+    runningAccumulated += periodDepreciation;
 
-    closingBalance.push(cost[index] - accumulatedDepreciation[index]);
+    accumulatedDepreciation.push(runningAccumulated);
+    closingBalance.push(calculatedCost - runningAccumulated);
   });
 
-  console.log("depreciation:: ", depreciation);
-  console.log("accumulatedDepreciation:: ", accumulatedDepreciation);
   return { cost, depreciation, accumulatedDepreciation, closingBalance };
 };
 
