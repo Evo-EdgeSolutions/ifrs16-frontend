@@ -30,13 +30,13 @@ export const CalcForm = () => {
   } = useForm<Ifrs16Inputs>({
     resolver: zodResolver(ifrs16Schema),
     defaultValues: {
-      contractDate: new Date("2026-01-01T00:00:00"),
-      commencementDate: new Date("2026-01-01T00:00:00"),
-      endDate: new Date("2026-12-31T00:00:00"),
-      totalRental: 600000,
+      // contractDate: new Date("2026-01-01T00:00:00"),
+      // commencementDate: new Date("2026-01-01T00:00:00"),
+      // endDate: new Date("2028-01-01T00:00:00"),
+      // totalRental: 600000,
       advanceInMonthlyInstallments: "quarterly",
-      rentalLegalFees: 10000,
-      incrementalBorrowingRate: 10,
+      // rentalLegalFees: 10000,
+      // incrementalBorrowingRate: 9.96,
       paymentTiming: "advance",
     },
   });
