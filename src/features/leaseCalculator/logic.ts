@@ -21,7 +21,7 @@ export const calculateIfrs16 = async (
   console.log("Processing inputs:", data);
   try {
     const leaseTermYears = roundNumber(
-      calculateLeaseTermInYears(data.commencementDate, data.endDate),
+      calculateLeaseTermInYears(data.contractStartDate, data.contractEndDate),
     );
 
     // console.log("leaseTermYears:: ", leaseTermYears);
@@ -40,7 +40,7 @@ export const calculateIfrs16 = async (
     const advanceDeduction = 0;
 
     const leasePaymentPeriods = getLeasePaymentPeriod(
-      data.commencementDate,
+      data.contractStartDate,
       leaseTermYears,
       data.paymentTiming,
     );
@@ -80,7 +80,7 @@ export const calculateIfrs16 = async (
     const rightOfUseAssetAmortisation = getRightOfUseAssetAmortisation(
       paymentPeriods,
       rawLeaseLiabilityInitial,
-      data.rentalLegalFees
+      data.initialDirectCosts
     );
 
     const liabilitySchedule: LiabilityRow[] = paymentPeriods.map(
@@ -106,13 +106,14 @@ export const calculateIfrs16 = async (
 
     // FINAL OUTPUT
     return {
-      rouAsset: roundNumber(rawLeaseLiabilityInitial + data.rentalLegalFees),
+      rouAsset: roundNumber(rawLeaseLiabilityInitial + data.initialDirectCosts),
       pvOfCashFlows: roundNumber(rawLeaseLiabilityInitial),
       leaseLiability: roundNumber(leaseLiabilityAmortisation.closingBalance[0]),
       totalInterest: roundNumber(rawTotalInterest),
       liabilitySchedule, // Add to return
       assetSchedule, // Add to return
-      totalRental:data.totalRental
+      totalRental:data.totalRental,
+      initialDirectCosts:data.initialDirectCosts
     };
   } catch (error) {
     console.error("Failed to calculate IFRS 16 values:", error);

@@ -30,14 +30,13 @@ export const CalcForm = () => {
   } = useForm<Ifrs16Inputs>({
     resolver: zodResolver(ifrs16Schema),
     defaultValues: {
-      // contractDate: new Date("2026-01-01T00:00:00"),
-      // commencementDate: new Date("2026-01-01T00:00:00"),
-      // endDate: new Date("2028-01-01T00:00:00"),
-      // totalRental: 600000,
       advanceInMonthlyInstallments: "quarterly",
-      // rentalLegalFees: 10000,
-      // incrementalBorrowingRate: 9.96,
       paymentTiming: "advance",
+      // contractStartDate: new Date("2026-01-01T00:00:00"),
+      // contractEndDate: new Date("2028-01-01T00:00:00"),
+      // totalRental: 600000,
+      // initialDirectCosts: 10000,
+      // incrementalBorrowingRate: 0,
     },
   });
 
@@ -47,46 +46,33 @@ export const CalcForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.formContainer}>
-      <Heading level="h3">Lease Parameters</Heading>
+      <Heading level="h3">Lease Calculation Inputs</Heading>
 
       {/* We use a grid utility class here (add to your SCSS) to place inputs side-by-side */}
       <div className={styles.inputGrid}>
         {/* --- DATES --- */}
         <Controller
           control={control}
-          name="contractDate"
+          name="contractStartDate"
           render={({ field }) => (
             <DatePickerField
-              label="Contract Date"
+              label="Contract Start Date"
               selected={field.value}
               onChange={field.onChange}
-              error={errors.contractDate?.message}
+              error={errors.contractStartDate?.message}
             />
           )}
         />
 
         <Controller
           control={control}
-          name="commencementDate"
+          name="contractEndDate"
           render={({ field }) => (
             <DatePickerField
-              label="Commencement Date"
+              label="Contract End Date"
               selected={field.value}
               onChange={field.onChange}
-              error={errors.commencementDate?.message}
-            />
-          )}
-        />
-
-        <Controller
-          control={control}
-          name="endDate"
-          render={({ field }) => (
-            <DatePickerField
-              label="End Date"
-              selected={field.value}
-              onChange={field.onChange}
-              error={errors.endDate?.message}
+              error={errors.contractEndDate?.message}
             />
           )}
         />
@@ -106,11 +92,11 @@ export const CalcForm = () => {
           error={errors.advanceInMonthlyInstallments?.message}
         />
         <InputField
-          label="Rental Legal Fees"
+          label="Initial Direct Costs"
           type="number"
           step="0.01"
-          {...register("rentalLegalFees", { valueAsNumber: true })}
-          error={errors.rentalLegalFees?.message}
+          {...register("initialDirectCosts", { valueAsNumber: true })}
+          error={errors.initialDirectCosts?.message}
         />
 
         {/* --- RATES & SELECTORS --- */}
