@@ -19,6 +19,7 @@ export const CalcJournalEntries = () => {
   const result = useCalcStore((state) => state.result);
 
   if (!result) return null;
+
   const formattedDate = new Date(result.assetSchedule[0].monthEnd)
     .toLocaleDateString("en-US", {
       month: "short",
@@ -44,8 +45,22 @@ export const CalcJournalEntries = () => {
         </span>
       ),
     },
-    { header: "DR", accessor: "dr", render: (row) => formatMoney(row.dr) },
-    { header: "CR", accessor: "cr", render: (row) => formatMoney(row.cr) },
+    {
+      header: "DR",
+      accessor: "dr",
+      render: (row) => {
+        const formattedValue = formatMoney(row.dr);
+        return formattedValue ? `$${formattedValue}` : "";
+      },
+    },
+    {
+      header: "CR",
+      accessor: "cr",
+      render: (row) => {
+        const formattedValue = formatMoney(row.cr);
+        return formattedValue ? `$${formattedValue}` : "";
+      },
+    },
   ];
 
   // 3. Flattened Dummy Data
@@ -133,7 +148,6 @@ export const CalcJournalEntries = () => {
       isHeader: false,
       isCredit: true,
     },
-
     {
       id: "gl-h4",
       month: formattedDate,
@@ -158,6 +172,34 @@ export const CalcJournalEntries = () => {
       description: "Cash/Bank",
       dr: null,
       cr: Number(result?.liabilitySchedule[0].monthlyRent) * -1,
+      isHeader: false,
+      isCredit: true,
+    },
+
+     {
+      id: "gl-z4",
+      month: formattedDate,
+      description: "Direct Cost recognition",
+      dr: null,
+      cr: null,
+      isHeader: true,
+      isCredit: false,
+    },
+    {
+      id: "gl-k7",
+      month: "",
+      description: "ROU Asset",
+      dr: Number(result?.initialDirectCosts),
+      cr: null,
+      isHeader: false,
+      isCredit: false,
+    },
+    {
+      id: "gl-z8",
+      month: "",
+      description: "Cash/Bank",
+      dr: null,
+      cr: Number(result?.initialDirectCosts),
       isHeader: false,
       isCredit: true,
     },

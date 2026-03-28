@@ -19,22 +19,22 @@ export const AmortizationTables = () => {
     { header: "Period", accessor: "period" },
     { header: "Month end", accessor: "monthEnd" },
     {
-      header: "PV of Liability",
+      header: "PV of Liability ($)",
       accessor: "pvOfLiability",
       render: (row) => formatAccounting(row.pvOfLiability),
     },
     {
-      header: "Monthly Rent",
+      header: "Monthly Rent ($)",
       accessor: "monthlyRent",
       render: (row) => formatAccounting(row.monthlyRent),
     },
     {
-      header: "Interest",
+      header: "Interest ($)",
       accessor: "interest",
       render: (row) => formatAccounting(row.interest),
     },
     {
-      header: "Closing Balance",
+      header: "Closing Balance ($)",
       accessor: "closingBalance",
       render: (row) => formatAccounting(row.closingBalance),
     },
@@ -45,22 +45,22 @@ export const AmortizationTables = () => {
     { header: "Period", accessor: "period" },
     { header: "Month end", accessor: "monthEnd" },
     {
-      header: "Cost",
+      header: "Cost ($)",
       accessor: "cost",
       render: (row) => formatAccounting(row.cost),
     },
     {
-      header: "Depreciation",
+      header: "Depreciation ($)",
       accessor: "depreciation",
       render: (row) => formatAccounting(row.depreciation),
     },
     {
-      header: "Accumulated depreciation",
+      header: "Accumulated depreciation ($)",
       accessor: "accumulatedDepreciation",
       render: (row) => formatAccounting(row.accumulatedDepreciation),
     },
     {
-      header: "Closing Balance",
+      header: "Closing Balance ($)",
       accessor: "closingBalance",
       render: (row) => formatAccounting(row.closingBalance),
     },

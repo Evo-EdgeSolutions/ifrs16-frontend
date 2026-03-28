@@ -7,10 +7,10 @@ export const PAYMENT_TIMING = [
 ] as const;
 
 export const PaymentsPerYearMap: Record<string, number> = {
-  "annually": 1,
+  annually: 1,
   "semi-annually": 2,
-  "quarterly": 4,
-  "monthly": 12,
+  quarterly: 4,
+  monthly: 12,
 };
 
 export interface LeasePaymentSchedule {
@@ -30,20 +30,19 @@ export interface LedgerRow {
   description: string; // Will hold either the Entry Title OR Account Name
   dr: number | null;
   cr: number | null;
-  isHeader: boolean;   // True if this row is an Entry Title
-  isCredit: boolean;   // True if this row is a Credit Account
+  isHeader: boolean; // True if this row is an Entry Title
+  isCredit: boolean; // True if this row is a Credit Account
 }
 
 export const ifrs16Schema = z
   .object({
     // Dates
-    contractDate: z.date({ message: "Contract date is required" }),
-    commencementDate: z.date({ message: "Commencement date is required" }),
-    endDate: z.date({ message: "End date is required" }),
+    contractStartDate: z.date({ message: "Contract start date is required" }),
+    contractEndDate: z.date({ message: "End date is required" }),
 
     // Financials
     totalRental: z.number().min(0, "Rental cannot be negative"),
-    rentalLegalFees: z.number().min(0, "Fees cannot be negative"),
+    initialDirectCosts: z.number().min(0, "Fees cannot be negative"),
 
     // Rates
     incrementalBorrowingRate: z
@@ -59,10 +58,36 @@ export const ifrs16Schema = z
       message: "Please select payment timing",
     }),
   })
-  .refine((data) => data.endDate > data.commencementDate, {
-    // Production-grade cross-field validation
-    message: "End date must be after commencement date",
-    path: ["endDate"], // Attaches the error to the endDate field
+  .superRefine((data, ctx) => {
+    // 1. Set up clean dates with no time zones/hours interfering
+    const start = new Date(data.contractStartDate);
+    start.setHours(0, 0, 0, 0);
+    
+    const end = new Date(data.contractEndDate);
+    end.setHours(0, 0, 0, 0);
+
+    // 2. FIRST CHECK: Is the end date before the start date?
+    if (end < start) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "End date cannot be earlier than the start date.",
+        path: ["contractEndDate"],
+      });
+      return; // 🛑 Stop evaluating! We don't want to show the 1-year error too.
+    }
+
+    // 3. SECOND CHECK: 1-Year IFRS 16 Rule
+    const minEndDate = new Date(start);
+    minEndDate.setFullYear(minEndDate.getFullYear() + 1);
+    minEndDate.setDate(minEndDate.getDate() - 1);
+
+    if (end < minEndDate) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "The agreement is less than 1 year, Not qualified to recognize ROU asset.",
+        path: ["contractEndDate"],
+      });
+    }
   });
 
 export type Ifrs16Inputs = z.infer<typeof ifrs16Schema>;
@@ -94,4 +119,5 @@ export interface Ifrs16Outputs {
   liabilitySchedule: LiabilityRow[]; // <-- New
   assetSchedule: AssetRow[];
   totalRental: number;
+  initialDirectCosts: number;
 }
