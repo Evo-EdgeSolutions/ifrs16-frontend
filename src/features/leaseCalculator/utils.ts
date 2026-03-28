@@ -2,10 +2,10 @@ import { roundNumber } from "@/src/helpers/round";
 import { LeasePaymentSchedule } from "./schema";
 
 export const calculateLeaseTermInYears = (
-  commencementDate: string | Date,
+  contractStartDate: string | Date,
   endDate: string | Date,
 ): number => {
-  const start = new Date(commencementDate);
+  const start = new Date(contractStartDate);
   const end = new Date(endDate);
 
   if (isNaN(start.getTime()) || isNaN(end.getTime())) {
@@ -40,14 +40,14 @@ export const checkPaymentTiming = (paymentTiming: string): number => {
 };
 
 export const getLeasePaymentPeriod = (
-  commencementDate: string | Date,
+  contractStartDate: string | Date,
   leaseTermYears: number,
   paymentTiming: string,
 ): LeasePaymentSchedule => {
   const totalMonths = Math.round(leaseTermYears * 12);
   const start = checkPaymentTiming(paymentTiming);
 
-  const baseDate = new Date(commencementDate);
+  const baseDate = new Date(contractStartDate);
 
   const periods = Array.from({ length: totalMonths }, (_, i) => i + start);
 
@@ -80,7 +80,7 @@ export const calculatePresentValueSchedule = (
 
   paymentPeriods.forEach((t) => {
     const factor2 = roundNumber(1 / (1 + monthlyDiscountRate / 100) ** t, 3);
-    const factor = (1 / (1 + monthlyDiscountRate / 100) ** t);
+    const factor = 1 / (1 + monthlyDiscountRate / 100) ** t;
     const factor1 =
       Math.trunc((1 / (1 + monthlyDiscountRate / 100) ** t) * 1000) / 1000;
     discountFactors.push(factor);
@@ -129,36 +129,42 @@ export const getLeaseLiabilityAmortisation = (
     pvOfLiability.push(periodPvOfLiability > 0 ? periodPvOfLiability : 0);
     const isPaymentMonth = checkIsPaymentMonth(t - ifArrears, paymentsPerYear);
 
-    // const isRentalOver = index > 0 && (closingBalance[index - 1] - netCashflow) > 0;
-
     const currentCashflow = isPaymentMonth ? netCashflow : 0;
     monthlyRental.push(isRentalOver ? 0 : currentCashflow);
 
     const interestForPeriod =
       (periodPvOfLiability - currentCashflow) *
       (incrementalBorrowingMonthlyRate / 100);
+
+    // console.log("interestForPeriod:: ", interestForPeriod);
     interestForPeriods.push(
       isRentalOver ? 0 : interestForPeriod > 0 ? interestForPeriod : 0,
     );
 
     const periodClosingBalance =
       periodPvOfLiability - currentCashflow + interestForPeriod;
+
     closingBalance.push(
       isRentalOver ? 0 : periodClosingBalance > 0 ? periodClosingBalance : 0,
     );
     periodPvOfLiability = isRentalOver ? 0 : periodClosingBalance;
 
-    isRentalOver = index > 0 && interestForPeriods[index] <= 0;
+    if (incrementalBorrowingMonthlyRate != 0) {
+      isRentalOver = index > 0 && interestForPeriods[index] <= 0;
+    }
+
+    // console.log("isRentalOver:: ", isRentalOver);
+    // console.log("=====");
   });
 
-  console.log("monthlyRental:: ", monthlyRental);
+  // console.log("monthlyRental:: ", monthlyRental);
   return { pvOfLiability, monthlyRental, interestForPeriods, closingBalance };
 };
 
 export const getRightOfUseAssetAmortisation = (
   paymentPeriods: number[],
   leaseLiabilityInitialApplication: number,
-  rentalLegalFees: number,
+  initialDirectCosts: number,
 ): {
   cost: number[];
   depreciation: number[];
@@ -166,7 +172,7 @@ export const getRightOfUseAssetAmortisation = (
   closingBalance: number[];
 } => {
   let periodsCount = paymentPeriods.length;
-  const calculatedCost = leaseLiabilityInitialApplication + rentalLegalFees;
+  const calculatedCost = leaseLiabilityInitialApplication + initialDirectCosts;
   const periodDepreciation = calculatedCost / periodsCount;
   const cost = Array(periodsCount).fill(calculatedCost);
   const depreciation = Array(periodsCount).fill(periodDepreciation);
